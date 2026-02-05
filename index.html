@@ -3,30 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Estimation budget tatouage</title>
+  <title>Estimation budget tatouage — Caprice Rose</title>
   <style>
     :root { color-scheme: light; }
-    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin:0; padding: 22px; }
+    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin:0; padding: 22px; background-color: #fdfbfb; }
     .wrap { max-width: 720px; margin: 0 auto; }
-    .card { border: 1px solid #e0e0e0; border-radius: 16px; padding: 18px; }
-    h1 { font-size: 28px; line-height: 1.15; margin: 0 0 10px 0; }
-    .intro { font-size: 14px; line-height: 1.55; margin: 0 0 14px 0; opacity: .85; }
+    .card { border: 1px solid #e0e0e0; border-radius: 20px; padding: 24px; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    h1 { font-size: 26px; line-height: 1.15; margin: 0 0 10px 0; color: #333; }
+    .intro { font-size: 14px; line-height: 1.55; margin: 0 0 14px 0; opacity: .8; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    label { display:block; font-size: 13px; margin-top: 12px; }
-    input, select { width: 100%; padding: 10px 12px; margin-top: 6px; border-radius: 12px; border: 1px solid #cfcfcf; font-size: 15px; }
+    label { display:block; font-size: 13px; font-weight: 600; margin-top: 12px; color: #555; }
+    input, select { width: 100%; padding: 12px; margin-top: 6px; border-radius: 12px; border: 1px solid #cfcfcf; font-size: 15px; box-sizing: border-box; }
     .checks { margin-top: 10px; display:grid; gap: 10px; }
-    .check { display:flex; gap: 10px; align-items:center; font-size: 14px; }
+    .check { display:flex; gap: 10px; align-items:center; font-size: 14px; cursor: pointer; }
     .check input { width: 18px; height: 18px; margin: 0; }
-    .result { margin-top: 16px; border-radius: 14px; padding: 14px; border: 1px dashed #bdbdbd; }
+    .result { margin-top: 20px; border-radius: 16px; padding: 18px; border: 1px dashed #ec4899; background: #fff5f7; }
     .kpi { display:flex; gap: 16px; flex-wrap: wrap; font-size: 13px; opacity: .85; }
-    .price { font-size: 28px; font-weight: 800; margin-top: 6px; }
+    .price { font-size: 32px; font-weight: 800; margin-top: 6px; color: #be185d; }
     .muted { opacity: .75; }
-    .pill { display:inline-block; font-size: 12px; padding: 6px 10px; border-radius: 999px; background: #f5f5f5; border: 1px solid #e9e9e9; margin-bottom: 12px; }
-    .footer { margin-top: 10px; font-size: 12px; line-height: 1.45; opacity: .75; }
-    .mono { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; }
-    button { margin-top: 14px; width: 100%; padding: 11px 12px; border-radius: 14px; border: 1px solid #111; background: #111; color:#fff; font-size: 15px; cursor:pointer; }
-    button:active { transform: translateY(1px); }
-    @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 24px; } }
+    .pill { display:inline-block; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 999px; background: #fdf2f8; border: 1px solid #fbcfe8; color: #be185d; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .mono { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-weight: bold; }
+    button { margin-top: 18px; width: 100%; padding: 14px; border-radius: 14px; border: none; background: #111; color:#fff; font-size: 16px; font-weight: 600; cursor:pointer; transition: transform 0.1s; }
+    button:active { transform: scale(0.98); }
+    .cta-booking { display: none; margin-top: 20px; text-decoration: none; text-align: center; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white; font-weight: 700; font-size: 16px; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 22px; } }
   </style>
 </head>
 <body>
@@ -34,99 +35,52 @@
     <div class="card">
       <div class="pill">Estimation indicative — pas un devis</div>
       <h1>Estime le budget de ton tatouage</h1>
-      <p class="intro">
-        Cette estimation te donne une idée du budget selon la taille et le niveau de détail.
-        Chaque projet est unique : le prix final peut varier après discussion (placement, peau, faisabilité, détails réels).
-      </p>
-
+      <p class="intro">Cette estimation te donne une idée du budget selon la taille et le niveau de détail. Le prix final sera confirmé lors de notre discussion.</p>
       <div class="grid">
-        <div>
-          <label for="w">Largeur (cm)</label>
-          <input id="w" type="number" min="1" step="1" value="15" />
-        </div>
-        <div>
-          <label for="h">Hauteur (cm)</label>
-          <input id="h" type="number" min="1" step="1" value="30" />
-        </div>
+        <div><label for="w">Largeur (cm)</label><input id="w" type="number" min="1" step="1" value="10" /></div>
+        <div><label for="h">Hauteur (cm)</label><input id="h" type="number" min="1" step="1" value="10" /></div>
       </div>
-
       <label for="detail">Niveau de détail</label>
       <select id="detail">
-        <option value="0.9">Simple — coef 0,9</option>
-        <option value="1.0" selected>Standard — coef 1,0</option>
-        <option value="1.2">Complexe — coef 1,2</option>
-        <option value="1.4">Très détaillé — coef 1,4</option>
+        <option value="0.9">Simple</option>
+        <option value="1.0" selected>Standard</option>
+        <option value="1.2">Complexe</option>
+        <option value="1.4">Très détaillé</option>
       </select>
-
       <div class="checks">
         <label class="check"><input id="zone" type="checkbox" /> Zone complexe (+50€)</label>
-        <label class="check"><input id="cover" type="checkbox" /> Cover / retouche lourde (coef +0,2)</label>
+        <label class="check"><input id="cover" type="checkbox" /> Cover / retouche lourde</label>
       </div>
-
-      <button id="calc" type="button">Calculer</button>
-
-      <div class="result" aria-live="polite">
+      <button id="calc" type="button">Calculer mon estimation</button>
+      <div id="result-box" class="result" style="display:none;">
         <div class="kpi">
           <div><span class="muted">Surface :</span> <span id="area" class="mono">—</span> <span class="muted">cm²</span></div>
-          <div><span class="muted">Temps estimatif :</span> <span id="time" class="mono">—</span> <span class="muted">h</span></div>
+          <div><span class="muted">Temps approx :</span> <span id="time" class="mono">—</span> <span class="muted">h</span></div>
         </div>
         <div class="price">≈ <span id="price" class="mono">—</span> €</div>
-        <div class="footer">
-          Paramètres : <span class="mono">1,35€/cm²</span> · minimum <span class="mono">150€</span> · zone <span class="mono">+50€</span> · rendement <span class="mono">110 cm²/h</span>.
-        </div>
       </div>
+      <a href="https://app.encre.me/caprice_rose/book" id="booking-btn" class="cta-booking">Réserver mon projet maintenant</a>
     </div>
   </div>
-
 <script>
 (() => {
-  const PRICE_PER_CM2 = 1.35;
-  const MIN_PRICE = 150;
-  const ZONE_SURCHARGE = 50;
-  const PRODUCTIVITY = 110;
-
-  const w = document.getElementById('w');
-  const h = document.getElementById('h');
-  const detail = document.getElementById('detail');
-  const zone = document.getElementById('zone');
-  const cover = document.getElementById('cover');
-  const areaEl = document.getElementById('area');
-  const timeEl = document.getElementById('time');
-  const priceEl = document.getElementById('price');
-  const btn = document.getElementById('calc');
-
+  const PRICE_PER_CM2 = 1.35; const MIN_PRICE = 150; const ZONE_SURCHARGE = 50; const PRODUCTIVITY = 110;
+  const w = document.getElementById('w'); const h = document.getElementById('h'); const detail = document.getElementById('detail');
+  const zone = document.getElementById('zone'); const cover = document.getElementById('cover');
+  const areaEl = document.getElementById('area'); const timeEl = document.getElementById('time');
+  const priceEl = document.getElementById('price'); const btn = document.getElementById('calc');
+  const bookingBtn = document.getElementById('booking-btn'); const resultBox = document.getElementById('result-box');
   function roundTo(n, step) { return Math.round(n / step) * step; }
   function safe(n) { return (Number.isFinite(n) && n > 0) ? n : 0; }
-
   function compute() {
-    const W = safe(parseFloat(w.value));
-    const H = safe(parseFloat(h.value));
-    const coefBase = parseFloat(detail.value) || 1.0;
-    const coef = coefBase + (cover.checked ? 0.2 : 0.0);
-
-    const area = W * H;
-    let price = area * PRICE_PER_CM2 * coef;
-    if (zone.checked) price += ZONE_SURCHARGE;
-    price = Math.max(MIN_PRICE, price);
-
-    const displayed = roundTo(price, 10);
-    const time = area ? (area / PRODUCTIVITY) : 0;
-
-    areaEl.textContent = area ? area.toFixed(0) : "—";
-    timeEl.textContent = area ? time.toFixed(1) : "—";
-    priceEl.textContent = area ? displayed.toFixed(0) : "—";
+    const W = safe(parseFloat(w.value)); const H = safe(parseFloat(h.value));
+    const coef = (parseFloat(detail.value) || 1.0) + (cover.checked ? 0.2 : 0.0);
+    const area = W * H; if (area <= 0) return;
+    let price = Math.max(MIN_PRICE, (area * PRICE_PER_CM2 * coef) + (zone.checked ? ZONE_SURCHARGE : 0));
+    areaEl.textContent = area.toFixed(0); timeEl.textContent = (area / PRODUCTIVITY).toFixed(1); priceEl.textContent = roundTo(price, 10).toFixed(0);
+    resultBox.style.display = 'block'; bookingBtn.style.display = 'block';
   }
-
-  ['input','change'].forEach(evt => {
-    w.addEventListener(evt, compute);
-    h.addEventListener(evt, compute);
-    detail.addEventListener(evt, compute);
-    zone.addEventListener(evt, compute);
-    cover.addEventListener(evt, compute);
-  });
   btn.addEventListener('click', compute);
-
-  compute();
 })();
 </script>
 </body>
