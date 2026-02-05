@@ -15,7 +15,6 @@
     label { display:block; font-size: 13px; font-weight: 600; margin-top: 12px; color: #555; }
     input, select { width: 100%; padding: 12px; margin-top: 6px; border-radius: 12px; border: 1px solid #cfcfcf; font-size: 15px; box-sizing: border-box; }
     
-    /* Style de la description dynamique */
     .desc-box { 
       margin-top: 10px; 
       padding: 12px; 
@@ -25,25 +24,38 @@
       font-size: 13px; 
       line-height: 1.4;
       color: #444;
-      animation: fadeIn 0.3s ease;
     }
     .desc-box b { color: #be185d; }
 
-    .help-text { font-size: 12px; font-style: italic; color: #777; margin-top: 12px; line-height: 1.4; }
     .info-sub { font-size: 11px; color: #777; margin-left: 28px; margin-top: -2px; line-height: 1.3; margin-bottom: 8px; }
     .checks { margin-top: 15px; display:grid; gap: 12px; }
     .check { display:flex; gap: 10px; align-items:center; font-size: 14px; cursor: pointer; }
     .check input { width: 18px; height: 18px; margin: 0; flex-shrink: 0; }
+    
     .result { margin-top: 20px; border-radius: 16px; padding: 18px; border: 1px dashed #ec4899; background: #fff5f7; }
-    .alert-mini { margin-top: 20px; border-radius: 16px; padding: 18px; border: 1px solid #be185d; background: #fff1f2; color: #be185d; font-size: 14px; line-height: 1.5; font-weight: 600; text-align: center; }
+    
+    .alert-mini { 
+      margin-top: 20px; 
+      border-radius: 16px; 
+      padding: 18px; 
+      border: 1px dashed #ec4899; 
+      background: #fff5f7; 
+      color: #333; 
+      font-size: 14px; 
+      line-height: 1.5; 
+      font-weight: 500; 
+      text-align: center; 
+    }
+
     .kpi { display:flex; gap: 16px; flex-wrap: wrap; font-size: 13px; opacity: .85; }
     .price { font-size: 32px; font-weight: 800; margin-top: 6px; color: #be185d; }
     .muted { opacity: .75; }
     .pill { display:inline-block; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 999px; background: #fdf2f8; border: 1px solid #fbcfe8; color: #be185d; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
     .mono { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-weight: bold; }
+    
     button { margin-top: 18px; width: 100%; padding: 14px; border-radius: 14px; border: none; background: #111; color:#fff; font-size: 16px; font-weight: 600; cursor:pointer; }
-    .cta-booking { display: none; margin-top: 20px; text-decoration: none; text-align: center; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white; font-weight: 700; font-size: 16px; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .cta-booking { display: none; margin-top: 20px; text-decoration: none; text-align: center; padding: 16px; border-radius: 14px; background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white; font-weight: 700; font-size: 16px; }
+    
     @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -52,7 +64,7 @@
     <div class="card">
       <div class="pill">Estimation indicative — pas un devis</div>
       <h1>Estime le budget de ton tatouage</h1>
-      <p class="intro">Cette estimation te donne une idée du budget selon la taille et le détail. Le prix final sera confirmé ensemble.</p>
+      <p class="intro">Cette estimation te donne une idée du budget selon la taille et le niveau de détail. Le prix final sera confirmé lors de notre discussion.</p>
       
       <div class="grid">
         <div><label for="w">Largeur (cm)</label><input id="w" type="number" placeholder="Ex: 5" /></div>
@@ -82,7 +94,7 @@
         </div>
       </div>
 
-      <label for="colors">Couleurs (+30€ / couleur)</label>
+      <label for="colors">Couleurs souhaitées (+30€ / couleur)</label>
       <select id="colors">
         <option value="0" selected>Noir et gris uniquement</option>
         <option value="1">1 couleur</option>
@@ -95,7 +107,7 @@
       <button id="calc" type="button" onclick="compute()">Calculer mon estimation</button>
 
       <div id="mini-alert" class="alert-mini" style="display:none;">
-        ✨ Pour les projets < 50cm² ou très épurés, contacte-moi directement.
+        ✨ Pour les petits projets (mini-tatouages) ou tatouages grands mais très épurés, merci de me contacter directement pour un devis personnalisé.
       </div>
 
       <div id="result-box" class="result" style="display:none;">
@@ -111,7 +123,6 @@
   </div>
 
 <script>
-  // Les descriptions
   const descriptions = {
     "0.9": "<b>Simple :</b> Projet épuré, ligne claire uniquement. (Ex : une fleur seule, peu ou pas d'ombrage).",
     "1.0": "<b>Standard :</b> Composition florale équilibrée (max 3 fleurs) avec ombrages légers.",
@@ -127,18 +138,23 @@
   function compute() {
     const BASE_PRICE_CM2 = 1.80; 
     const LARGE_PRICE_CM2 = 1.25; 
-    const LIMIT_SURFACE = 50; 
+    const MIN_PRICE = 150; 
+    const LIMIT_SURFACE = 50;
 
     const w = parseFloat(document.getElementById('w').value) || 0;
     const h = parseFloat(document.getElementById('h').value) || 0;
     const area = w * h;
 
+    const resultBox = document.getElementById('result-box');
+    const miniAlert = document.getElementById('mini-alert');
+    const bookingBtn = document.getElementById('booking-btn');
+
     if (area <= 0) { alert("Indique les dimensions !"); return; }
     
     if (area < LIMIT_SURFACE) {
-      document.getElementById('mini-alert').style.display = 'block';
-      document.getElementById('result-box').style.display = 'none';
-      document.getElementById('booking-btn').style.display = 'block';
+      miniAlert.style.display = 'block';
+      resultBox.style.display = 'none';
+      bookingBtn.style.display = 'block';
       return;
     }
 
@@ -151,14 +167,15 @@
 
     const coefTotal = detailCoef + texturCoef;
     let price = (basePrice * coefTotal) + zoneExtra + colorExtra;
+    price = Math.max(MIN_PRICE, price);
     
     document.getElementById('area').textContent = area.toFixed(0);
     document.getElementById('time').textContent = (area / 110 * coefTotal).toFixed(1);
     document.getElementById('price').textContent = (Math.round(price / 10) * 10).toFixed(0);
     
-    document.getElementById('result-box').style.display = 'block';
-    document.getElementById('mini-alert').style.display = 'none';
-    document.getElementById('booking-btn').style.display = 'block';
+    resultBox.style.display = 'block';
+    miniAlert.style.display = 'none';
+    bookingBtn.style.display = 'block';
   }
 </script>
 </body>
