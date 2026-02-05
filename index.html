@@ -38,7 +38,6 @@
     <div class="card">
       <div class="pill">Estimation indicative — pas un devis</div>
       <h1>Estime le budget de ton tatouage</h1>
-      
       <p class="intro">Cette estimation te donne une idée du budget selon la taille et le niveau de détail. Le prix final sera confirmé lors de notre discussion.</p>
       
       <div class="grid">
@@ -96,7 +95,8 @@
 
 <script>
 (() => {
-  const PRICE_PER_CM2 = 1.80; 
+  const BASE_PRICE_CM2 = 1.80; 
+  const LARGE_PRICE_CM2 = 1.25; // Ajusté pour atteindre tes 150€/h sur les grandes pièces
   const MIN_PRICE = 150; 
   const LIMIT_SURFACE = 50; 
   const COLOR_PRICE = 30; 
@@ -132,6 +132,13 @@
       return;
     }
 
+    let basePrice = 0;
+    if (area <= 100) {
+      basePrice = area * BASE_PRICE_CM2;
+    } else {
+      basePrice = (100 * BASE_PRICE_CM2) + ((area - 100) * LARGE_PRICE_CM2);
+    }
+
     let zoneExtra = 0;
     if (zone.checked) {
       zoneExtra = (area < 200) ? 50 : 100;
@@ -141,7 +148,7 @@
     const colorExtra = colorCount * COLOR_PRICE;
 
     const coef = (parseFloat(detail.value) || 1.0) + (textured.checked ? 0.2 : 0.0);
-    let price = (area * PRICE_PER_CM2 * coef) + zoneExtra + colorExtra;
+    let price = (basePrice * coef) + zoneExtra + colorExtra;
     price = Math.max(MIN_PRICE, price);
     
     areaEl.textContent = area.toFixed(0);
