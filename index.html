@@ -77,8 +77,8 @@
 <script>
 (() => {
   const PRICE_PER_CM2 = 1.80; 
-  const MIN_PRICE = 100;
-  const LIMIT_SURFACE = 80; // Nouvelle limite de 80 cm²
+  const MIN_PRICE = 150; // Retour au tarif minimum de 150€
+  const LIMIT_SURFACE = 80;
 
   const w = document.getElementById('w'); const h = document.getElementById('h');
   const detail = document.getElementById('detail'); const zone = document.getElementById('zone');
@@ -101,7 +101,6 @@
 
     if (area <= 0) return;
 
-    // Déclenchement du message d'alerte sous 80 cm²
     if (area < LIMIT_SURFACE) {
       miniAlert.style.display = 'block';
       bookingBtn.style.display = 'block';
