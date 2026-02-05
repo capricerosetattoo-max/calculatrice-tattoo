@@ -138,7 +138,7 @@
   function compute() {
     const BASE_PRICE_CM2 = 1.80; 
     const LARGE_PRICE_CM2 = 1.25; 
-    const MIN_PRICE = 150; 
+    const MIN_PRICE = 80; // Ton tarif minimum corrigé
     const LIMIT_SURFACE = 50;
 
     const w = parseFloat(document.getElementById('w').value) || 0;
@@ -151,6 +151,7 @@
 
     if (area <= 0) { alert("Indique les dimensions !"); return; }
     
+    // Blocage pour petits projets (phrase personnalisée)
     if (area < LIMIT_SURFACE) {
       miniAlert.style.display = 'block';
       resultBox.style.display = 'none';
@@ -158,6 +159,7 @@
       return;
     }
 
+    // Calcul dégressif
     let basePrice = area <= 100 ? area * BASE_PRICE_CM2 : (100 * BASE_PRICE_CM2) + ((area - 100) * LARGE_PRICE_CM2);
     
     const detailCoef = parseFloat(document.getElementById('detail').value);
@@ -167,6 +169,8 @@
 
     const coefTotal = detailCoef + texturCoef;
     let price = (basePrice * coefTotal) + zoneExtra + colorExtra;
+    
+    // Application du tarif minimum de 80€
     price = Math.max(MIN_PRICE, price);
     
     document.getElementById('area').textContent = area.toFixed(0);
