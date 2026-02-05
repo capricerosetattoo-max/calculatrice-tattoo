@@ -96,7 +96,7 @@
 <script>
 (() => {
   const BASE_PRICE_CM2 = 1.80; 
-  const LARGE_PRICE_CM2 = 1.25; // Ajusté pour atteindre tes 150€/h sur les grandes pièces
+  const LARGE_PRICE_CM2 = 1.25; 
   const MIN_PRICE = 150; 
   const LIMIT_SURFACE = 50; 
   const COLOR_PRICE = 30; 
@@ -147,12 +147,17 @@
     const colorCount = parseInt(colors.value) || 0;
     const colorExtra = colorCount * COLOR_PRICE;
 
+    // Calcul du coefficient incluant peau texturée (+0.2)
     const coef = (parseFloat(detail.value) || 1.0) + (textured.checked ? 0.2 : 0.0);
+    
     let price = (basePrice * coef) + zoneExtra + colorExtra;
     price = Math.max(MIN_PRICE, price);
     
     areaEl.textContent = area.toFixed(0);
-    timeEl.textContent = (area / 110).toFixed(1);
+    
+    // CORRECTION DU CALCUL DU TEMPS : On prend en compte le coefficient de détail/texture
+    timeEl.textContent = (area / 110 * coef).toFixed(1);
+    
     priceEl.textContent = roundTo(price, 10).toFixed(0);
     
     resultBox.style.display = 'block';
