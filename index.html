@@ -18,6 +18,7 @@
     .check { display:flex; gap: 10px; align-items:center; font-size: 14px; cursor: pointer; }
     .check input { width: 18px; height: 18px; margin: 0; }
     .result { margin-top: 20px; border-radius: 16px; padding: 18px; border: 1px dashed #ec4899; background: #fff5f7; }
+    .alert-mini { margin-top: 20px; border-radius: 16px; padding: 18px; border: 1px solid #be185d; background: #fff1f2; color: #be185d; font-size: 14px; line-height: 1.5; font-weight: 600; text-align: center; }
     .kpi { display:flex; gap: 16px; flex-wrap: wrap; font-size: 13px; opacity: .85; }
     .price { font-size: 32px; font-weight: 800; margin-top: 6px; color: #be185d; }
     .muted { opacity: .75; }
@@ -35,11 +36,13 @@
     <div class="card">
       <div class="pill">Estimation indicative — pas un devis</div>
       <h1>Estime le budget de ton tatouage</h1>
-      <p class="intro">Cette estimation te donne une idée du budget selon la taille et le niveau de détail. Le prix final sera confirmé lors de notre discussion.</p>
+      <p class="intro">Chaque projet est unique. Calcule une base de budget pour ton futur tatouage.</p>
+      
       <div class="grid">
         <div><label for="w">Largeur (cm)</label><input id="w" type="number" min="1" step="1" value="10" /></div>
         <div><label for="h">Hauteur (cm)</label><input id="h" type="number" min="1" step="1" value="10" /></div>
       </div>
+
       <label for="detail">Niveau de détail</label>
       <select id="detail">
         <option value="0.9">Simple</option>
@@ -47,11 +50,18 @@
         <option value="1.2">Complexe</option>
         <option value="1.4">Très détaillé</option>
       </select>
+
       <div class="checks">
         <label class="check"><input id="zone" type="checkbox" /> Zone complexe (+50€)</label>
         <label class="check"><input id="cover" type="checkbox" /> Cover / retouche lourde</label>
       </div>
+
       <button id="calc" type="button">Calculer mon estimation</button>
+
+      <div id="mini-alert" class="alert-mini" style="display:none;">
+        ✨ Pour les petits projets (mini-tatouages) ou tatouages grands mais épurés, merci de me contacter directement pour un devis personnalisé.
+      </div>
+
       <div id="result-box" class="result" style="display:none;">
         <div class="kpi">
           <div><span class="muted">Surface :</span> <span id="area" class="mono">—</span> <span class="muted">cm²</span></div>
@@ -59,26 +69,55 @@
         </div>
         <div class="price">≈ <span id="price" class="mono">—</span> €</div>
       </div>
-      <a href="https://app.encre.me/caprice_rose/book" id="booking-btn" class="cta-booking">Réserver mon projet maintenant</a>
+
+      <a href="https://app.encre.me/caprice_rose/book" id="booking-btn" class="cta-booking">Réserver mon projet / Me contacter</a>
     </div>
   </div>
+
 <script>
 (() => {
-  const PRICE_PER_CM2 = 1.35; const MIN_PRICE = 150; const ZONE_SURCHARGE = 50; const PRODUCTIVITY = 110;
-  const w = document.getElementById('w'); const h = document.getElementById('h'); const detail = document.getElementById('detail');
-  const zone = document.getElementById('zone'); const cover = document.getElementById('cover');
-  const areaEl = document.getElementById('area'); const timeEl = document.getElementById('time');
-  const priceEl = document.getElementById('price'); const btn = document.getElementById('calc');
-  const bookingBtn = document.getElementById('booking-btn'); const resultBox = document.getElementById('result-box');
+  const PRICE_PER_CM2 = 1.80; 
+  const MIN_PRICE = 100;
+  const LIMIT_SURFACE = 80; // Nouvelle limite de 80 cm²
+
+  const w = document.getElementById('w'); const h = document.getElementById('h');
+  const detail = document.getElementById('detail'); const zone = document.getElementById('zone');
+  const cover = document.getElementById('cover'); const areaEl = document.getElementById('area');
+  const timeEl = document.getElementById('time'); const priceEl = document.getElementById('price');
+  const btn = document.getElementById('calc'); const bookingBtn = document.getElementById('booking-btn');
+  const resultBox = document.getElementById('result-box'); const miniAlert = document.getElementById('mini-alert');
+  
   function roundTo(n, step) { return Math.round(n / step) * step; }
   function safe(n) { return (Number.isFinite(n) && n > 0) ? n : 0; }
+  
   function compute() {
-    const W = safe(parseFloat(w.value)); const H = safe(parseFloat(h.value));
+    const W = safe(parseFloat(w.value));
+    const H = safe(parseFloat(h.value));
+    const area = W * H;
+
+    resultBox.style.display = 'none';
+    miniAlert.style.display = 'none';
+    bookingBtn.style.display = 'none';
+
+    if (area <= 0) return;
+
+    // Déclenchement du message d'alerte sous 80 cm²
+    if (area < LIMIT_SURFACE) {
+      miniAlert.style.display = 'block';
+      bookingBtn.style.display = 'block';
+      return;
+    }
+
     const coef = (parseFloat(detail.value) || 1.0) + (cover.checked ? 0.2 : 0.0);
-    const area = W * H; if (area <= 0) return;
-    let price = Math.max(MIN_PRICE, (area * PRICE_PER_CM2 * coef) + (zone.checked ? ZONE_SURCHARGE : 0));
-    areaEl.textContent = area.toFixed(0); timeEl.textContent = (area / PRODUCTIVITY).toFixed(1); priceEl.textContent = roundTo(price, 10).toFixed(0);
-    resultBox.style.display = 'block'; bookingBtn.style.display = 'block';
+    let price = (area * PRICE_PER_CM2 * coef) + (zone.checked ? 50 : 0);
+    price = Math.max(MIN_PRICE, price);
+    
+    areaEl.textContent = area.toFixed(0);
+    timeEl.textContent = (area / 110).toFixed(1);
+    priceEl.textContent = roundTo(price, 10).toFixed(0);
+    
+    resultBox.style.display = 'block';
+    bookingBtn.style.display = 'block';
   }
   btn.addEventListener('click', compute);
 })();
